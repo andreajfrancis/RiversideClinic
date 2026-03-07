@@ -58,7 +58,7 @@ async function start() {
     }
 
     // Build menu + default view for this role
-    buildMenu(normalizeRole(user.role));
+    renderDashboardShell(normalizeRole(user.role));
   } catch (err) {
     showLogin();
   }
@@ -97,7 +97,7 @@ async function doLogin() {
 // -----------------------------
 // Dashboard Shell + Menu Routing
 // -----------------------------
-function buildMenu(role) {
+function renderDashboardShell(role) {
   // Basic shell: nav + main view
   // (We will later swap this markup to match your mockups exactly.)
   document.getElementById("content").innerHTML = `

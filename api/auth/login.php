@@ -18,10 +18,10 @@ $stmt = $pdo->prepare("
 $stmt->execute([$username]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if(!$user || $password !== $user['Password_Hash']){
-  http_response_code(401);
-  echo json_encode(["error"=>"Invalid login"]);
-  exit;
+if (!$user || !password_verify($password, $user['Password_Hash'])) {
+    http_response_code(401);
+    echo json_encode(["error" => "Invalid login"]);
+    exit;
 }
 
 if ((int)$user['Is_Disabled'] === 1) {
