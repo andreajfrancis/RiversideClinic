@@ -51,10 +51,10 @@ try {
 
         $stmt = $pdo->prepare("
           INSERT INTO Patient_Emergency_Contacts
-          (Patient_ID, Emergency_Contact_ID, Relationship_To_Patient, Emergency_Contact_Emergency_Contact_ID)
-          VALUES (?, ?, ?, ?)
+          (Patient_ID, Emergency_Contact_ID, Relationship_To_Patient)
+          VALUES (?, ?, ?)
         ");
-        $stmt->execute([$patientId, $emergencyContactId, $ecRel, $emergencyContactId]);
+$stmt->execute([$patientId, $emergencyContactId, $ecRel]);
     }
 
     // Optional insurance
@@ -63,10 +63,10 @@ try {
     if ($hasInsurance) {
         $stmt = $pdo->prepare("
           INSERT INTO Insurance_Info
-          (Patient_ID, Insurance_Provider, Payment_Status, Date_Sent, Patient_Patient_ID)
-          VALUES (?, ?, ?, ?, ?)
+          (Patient_ID, Insurance_Provider, Payment_Status, Date_Sent)
+          VALUES (?, ?, ?, ?)
         ");
-        $stmt->execute([$patientId, $insProvider, $insStatus, $insDateSent, $patientId]);
+        $stmt->execute([$patientId, $insProvider, $insStatus, $insDateSent]);
     }
 
     $pdo->commit();

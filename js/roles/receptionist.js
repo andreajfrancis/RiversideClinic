@@ -1,25 +1,33 @@
 // js/roles/receptionist.js
 
-function loadReceptionist(){
+function loadReceptionist() {
   const content = document.getElementById("dash_view") || document.getElementById("content");
   content.innerHTML = `
     <div class="card">
-      <h2>Receptionist - Front Desk</h2>
+      <h2>Receptionist Dashboard</h2>
       <p>Patients + Appointments</p>
 
       <div id="rx_tiles"></div>
-
-                
-        </div>
-      </div>
-
-      <div id="rx_next"></div>
-      <div id="rx_panel" style="margin-top:18px;"></div>
+      <div id="rx_next" style="margin-top:18px;"></div>
     </div>
   `;
 
   rx_loadTilesAndNext();
 }
+
+function loadReceptionistPatientCreate() {
+  const content = document.getElementById("dash_view") || document.getElementById("content");
+  content.innerHTML = `
+    <div class="card">
+      <h2>Register Patient</h2>
+      <p>Create a new patient record.</p>
+      <div id="rx_panel" style="margin-top:18px;"></div>
+    </div>
+  `;
+
+  rx_showPatientCreate();
+}
+
 
 function rx_panel(html){
   document.getElementById("rx_panel").innerHTML = html;
@@ -215,7 +223,7 @@ function rx_showPatientCreate() {
     </div>
 
     <div class="section" style="margin-top:18px;">
-      <details>
+      <details open>
         <summary><strong>Insurance Information</strong></summary>
 
         <div class="form-grid" style="margin-top:10px;">
@@ -260,16 +268,14 @@ async function rx_createPatient() {
     email: document.getElementById("p_email")?.value.trim() || "",
     dob: document.getElementById("p_dob")?.value || "",
 
-    emergencyName: [
-      document.getElementById("ec_first")?.value.trim() || "",
-      document.getElementById("ec_last")?.value.trim() || ""
-    ].filter(Boolean).join(" "),
+    emergencyFirstName: document.getElementById("ec_first")?.value.trim() || "",
+    emergencyLastName: document.getElementById("ec_last")?.value.trim() || "",
     emergencyPhone: document.getElementById("ec_phone")?.value.trim() || "",
-    emergencyRelation: document.getElementById("ec_relationship")?.value.trim() || "",
+    emergencyRelationship: document.getElementById("ec_relationship")?.value.trim() || "",
 
     insuranceProvider: document.getElementById("ins_provider")?.value.trim() || "",
     insuranceStatus: document.getElementById("ins_status")?.value || "",
-    insuranceDate: document.getElementById("ins_date_sent")?.value || ""
+    insuranceDateSent: document.getElementById("ins_date_sent")?.value || ""
   };
 
   if (!payload.firstName || !payload.lastName || !payload.dob) {
@@ -288,7 +294,6 @@ async function rx_createPatient() {
     }
 
     toast("Success", "Patient registered successfully.", "ok");
-    rx_loadTilesAndNext();
   } catch (err) {
     if (msg) {
       msg.innerHTML = `<div class="err">Failed to register patient.</div>`;
