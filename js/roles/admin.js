@@ -172,14 +172,6 @@ function admin_showUsers() {
   admin_loadUsers();
 }
 
-  const addBtn = document.getElementById("adminAddUserBtn");
-  if (addBtn) {
-    addBtn.addEventListener("click", function () {
-      admin_showCreateUser();
-    });
-  }
-
-  admin_loadUsers();
 
 function admin_loadUsers() {
   // Only create mock data once
@@ -893,4 +885,15 @@ function admin_escapeHtml(value){
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function adminAppointments() {
+  loadAppointmentsPage({
+    role: "admin",
+    canCreate: true,
+    canEdit: true,
+    canCheckIn: false,
+    providerScope: "all",
+    allowScopeToggle: false
+  });
 }
