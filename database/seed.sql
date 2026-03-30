@@ -128,3 +128,92 @@ ON DUPLICATE KEY UPDATE
   Scheduled_Start = VALUES(Scheduled_Start),
   Scheduled_End = VALUES(Scheduled_End),
   Status = VALUES(Status);
+
+  -- =========================
+-- EXTRA APPOINTMENTS
+-- Added for calendar/testing
+-- =========================
+INSERT INTO Appointment (Appointment_ID, Patient_ID, Provider_User_ID, Scheduled_Start, Scheduled_End, Status) VALUES
+  (3016, 2016, 1008, '2026-03-27 09:00:00', '2026-03-27 09:30:00', 'SCHEDULED'),
+  (3017, 2017, 1009, '2026-03-27 10:00:00', '2026-03-27 10:30:00', 'CHECKED_IN'),
+  (3018, 2018, 1010, '2026-03-27 11:30:00', '2026-03-27 12:00:00', 'COMPLETED'),
+  (3019, 2019, 1001, '2026-03-28 09:30:00', '2026-03-28 10:00:00', 'SCHEDULED'),
+  (3020, 2020, 1006, '2026-03-28 01:30:00', '2026-03-28 02:00:00', 'CANCELLED'),
+  (3021, 2021, 1007, '2026-03-29 10:30:00', '2026-03-29 11:00:00', 'CHECKED_IN')
+ON DUPLICATE KEY UPDATE
+  Patient_ID = VALUES(Patient_ID),
+  Provider_User_ID = VALUES(Provider_User_ID),
+  Scheduled_Start = VALUES(Scheduled_Start),
+  Scheduled_End = VALUES(Scheduled_End),
+  Status = VALUES(Status);
+
+-- =========================
+-- CLINIC HOURS
+-- 1=Sunday, 2=Monday, ..., 7=Saturday
+-- =========================
+INSERT INTO Clinic_Hours (Day_Of_Week, Is_Open, Open_Time, Close_Time) VALUES
+  (1, 0, NULL, NULL),
+  (2, 1, '08:00:00', '17:00:00'),
+  (3, 1, '08:00:00', '17:00:00'),
+  (4, 1, '08:00:00', '17:00:00'),
+  (5, 1, '08:00:00', '17:00:00'),
+  (6, 1, '08:00:00', '17:00:00'),
+  (7, 1, '08:00:00', '13:00:00')
+ON DUPLICATE KEY UPDATE
+  Is_Open = VALUES(Is_Open),
+  Open_Time = VALUES(Open_Time),
+  Close_Time = VALUES(Close_Time);
+
+-- =========================
+-- PROVIDER SCHEDULES
+-- 1=Sunday, 2=Monday, ..., 7=Saturday
+-- =========================
+INSERT INTO Provider_Schedule
+  (Schedule_ID, Provider_User_ID, Day_Of_The_Week, Start_Time, End_Time)
+VALUES
+  -- Dr. Fernando Doctor (1001)
+  (4001, 1001, 2, '08:00:00', '12:00:00'),
+  (4002, 1001, 2, '13:00:00', '17:00:00'),
+  (4003, 1001, 3, '08:00:00', '12:00:00'),
+  (4004, 1001, 4, '08:00:00', '12:00:00'),
+  (4005, 1001, 5, '13:00:00', '17:00:00'),
+  (4006, 1001, 6, '08:00:00', '13:00:00'),
+
+  -- Dr. Emily Carter (1006)
+  (4007, 1006, 2, '08:00:00', '17:00:00'),
+  (4008, 1006, 3, '08:00:00', '17:00:00'),
+  (4009, 1006, 4, '08:00:00', '17:00:00'),
+  (4010, 1006, 5, '08:00:00', '17:00:00'),
+  (4011, 1006, 6, '08:00:00', '17:00:00'),
+
+  -- Dr. James Walker (1007)
+  (4012, 1007, 2, '09:00:00', '15:00:00'),
+  (4013, 1007, 3, '09:00:00', '15:00:00'),
+  (4014, 1007, 4, '09:00:00', '15:00:00'),
+  (4015, 1007, 5, '09:00:00', '15:00:00'),
+  (4016, 1007, 6, '09:00:00', '13:00:00'),
+
+  -- Dr. Olivia Hughes (1008)
+  (4017, 1008, 2, '10:00:00', '16:00:00'),
+  (4018, 1008, 3, '10:00:00', '16:00:00'),
+  (4019, 1008, 5, '10:00:00', '16:00:00'),
+  (4020, 1008, 7, '08:00:00', '12:00:00'),
+
+  -- Dr. Noah Bennett (1009)
+  (4021, 1009, 3, '08:00:00', '12:00:00'),
+  (4022, 1009, 3, '13:00:00', '17:00:00'),
+  (4023, 1009, 4, '08:00:00', '12:00:00'),
+  (4024, 1009, 4, '13:00:00', '17:00:00'),
+  (4025, 1009, 6, '08:00:00', '12:00:00'),
+  (4026, 1009, 6, '13:00:00', '17:00:00'),
+
+  -- Dr. Sophia Reed (1010)
+  (4027, 1010, 2, '08:00:00', '12:00:00'),
+  (4028, 1010, 4, '08:00:00', '12:00:00'),
+  (4029, 1010, 6, '08:00:00', '12:00:00'),
+  (4030, 1010, 7, '08:00:00', '13:00:00')
+ON DUPLICATE KEY UPDATE
+  Provider_User_ID = VALUES(Provider_User_ID),
+  Day_Of_The_Week = VALUES(Day_Of_The_Week),
+  Start_Time = VALUES(Start_Time),
+  End_Time = VALUES(End_Time);
