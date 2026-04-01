@@ -1,66 +1,91 @@
 <?php
 require_once "../utils.php";
 $user = require_role("Doctor");
+$data = read_json();
 
-$appointmentId = (int)($_GET['appointmentId'] ?? 0);
-if ($appointmentId <= 0) {
-    http_response_code(400);
-    echo json_encode(['error' => 'appointmentId required']);
-    exit;
+$appointmentId = (int)($data["appointmentId"] ?? 0);
+$visitId = (int)($data["visitId"] ?? 0);
+$doctorExamNote = trim($data["doctorExamNote"] ?? "");
+$medicationChanges = trim($data["medicationChanges"] ?? "");
+$medicationNotes = trim($data["medicationNotes"] ?? "");
+$doctorCaseStatus = trim($data["doctorCaseStatus"] ?? "COMPLETED");
+
+if ($appointmentId <= 0 || $visitId <= 0) {
+  http_response_code(400);
+  echo json_encode(["error" => "appointmentId and visitId required"]);
+  exit;
 }
 
 $stmt = $pdo->prepare("
-  SELECT
-    a.Appointment_ID,
-    a.Status,
-    a.Scheduled_Start,
-    a.Scheduled_End,
-    p.Patient_ID,
-    p.First_Name AS Patient_First,
-    p.Last_Name AS Patient_Last,
-    p.Date_Of_Birth,
-    p.Phone_Number,
-    p.Address_Line1,
-    p.Address_Line2,
-    p.City,
-    p.State,
-    p.Postal_Code
-  FROM Appointment a
-  JOIN Patient p ON p.Patient_ID = a.Patient_ID
-  WHERE a.Appointment_ID = ?
-    AND a.Provider_User_ID = ?
+  SELECT Appointment_ID
+  FROM Appointment
+  WHERE Appointment_ID = ?
+    AND Provider_User_ID = ?
   LIMIT 1
 ");
-$stmt->execute([$appointmentId, $user['id']]);
-$appointment = $stmt->fetch(PDO::FETCH_ASSOC);
-if (!$appointment) {
-    http_response_code(404);
-    echo json_encode(['error' => 'Appointment not found']);
-    exit;
+$stmt->execute([$appointmentId, $user["id"]]);
+if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+  http_response_code(404);
+  echo json_encode(["error" => "Appointment not found"]);
+  exit;
 }
 
-$stmt = $pdo->prepare("SELECT Visit_ID, Doctor_Case_Status FROM Visit WHERE Appointment_ID = ? LIMIT 1");
-$stmt->execute([$appointmentId]);
-$visit = $stmt->fetch(PDO::FETCH_ASSOC);
-if (!$visit) {
-    http_response_code(404);
-    echo json_encode(['error' => 'Visit not found for appointment']);
-    exit;
+$stmt = $pdo->prepare("
+  UPDATE Visit_Exam
+  SET Doctor_Exam_Note = ?
+  WHERE Visit_ID = ?
+");
+$stmt->execute([$doctorExamNote, $visitId]);
+
+if ($stmt->rowCount() === 0) {
+  $stmt = $pdo->prepare("
+    INSERT INTO Visit_Exam (Visit_ID, Doctor_Exam_Note)
+    VALUES (?, ?)
+  ");
+  $stmt->execute([$visitId, $doctorExamNote]);
 }
 
-$stmt = $pdo->prepare("SELECT Nurse_Intake_Note, Doctor_Exam_Note, Blood_Pressure, Pulse, Respiration, Temperature,
-    Oxygen_Saturation, Height, Weight, Pain_Level
-    FROM Visit_Exam WHERE Visit_ID = ? LIMIT 1");
-$stmt->execute([(int)$visit['Visit_ID']]);
-$exam = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+$stmt = $pdo->prepare("
+  UPDATE Visit
+  SET Doctor_Case_Status = ?
+  WHERE Visit_ID = ?
+");
+$stmt->execute([$doctorCaseStatus, $visitId]);
 
-$stmt = $pdo->prepare("SELECT Current_Medications, Medication_Changes, Medication_Notes FROM Visit_Medication WHERE Visit_ID = ? LIMIT 1");
-$stmt->execute([(int)$visit['Visit_ID']]);
-$meds = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+$stmt = $pdo->prepare("
+  UPDATE Appointment
+  SET Status = 'COMPLETED'
+  WHERE Appointment_ID = ?
+    AND Provider_User_ID = ?
+");
+$stmt->execute([$appointmentId, $user["id"]]);
+
+$stmt = $pdo->prepare("
+  UPDATE Visit_Medication
+  SET Medication_Changes = ?, Medication_Notes = ?
+  WHERE Visit_ID = ?
+");
+$stmt->execute([$medicationChanges, $medicationNotes, $visitId]);
+
+if ($stmt->rowCount() === 0) {
+  $stmt = $pdo->prepare("
+    INSERT INTO Visit_Medication (
+      Visit_ID,
+      Current_Medications,
+      Medication_Changes,
+      Medication_Notes
+    )
+    VALUES (?, '', ?, ?)
+  ");
+  $stmt->execute([$visitId, $medicationChanges, $medicationNotes]);
+}
 
 echo json_encode([
-    'appointment' => $appointment,
-    'visit' => $visit,
-    'exam' => $exam,
-    'medication' => $meds
+  "success" => true,
+  "saved" => [
+    "visitId" => $visitId,
+    "doctorExamNote" => $doctorExamNote,
+    "medicationChanges" => $medicationChanges,
+    "medicationNotes" => $medicationNotes
+  ]
 ]);
