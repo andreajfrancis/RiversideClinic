@@ -276,6 +276,14 @@ function appointmentsView(appointmentId) {
   );
   if (!appt) return;
 
+  // Doctor should go straight to Complete Exam instead of editing appointment data
+  if (appointmentsState.role === "doctor") {
+    if (typeof doc_open === "function") {
+      doc_open(appt.Appointment_ID, 'appointments');
+    }
+    return;
+  }
+
   const patientName = `${appt.Patient_First} ${appt.Patient_Last}`;
   const providerName = `Dr. ${appt.Provider_First} ${appt.Provider_Last}`;
 
@@ -307,7 +315,7 @@ function appointmentsView(appointmentId) {
 
             <div class="field">
               <label>Start</label>
-              <input id="appt_edit_start" type="datetime-local" value="${appointmentsToDateTimeLocal(appt.Scheduled_Start)}" onchange="appointmentsSyncEditEndTime()">
+              <input id="appt_edit_start" type="datetime-local" value="${appointmentsToDateTimeLocal(appt.Scheduled_Start)}">
             </div>
 
             <div class="field">

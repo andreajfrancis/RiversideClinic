@@ -426,55 +426,44 @@ function admin_settings() {
 // Doctor Views
 // -----------------------------
 function doc_home() {
-  if (typeof doc_showDashboard === "function") {
-    doc_showDashboard();
-    return;
-  }
-
   if (typeof loadDoctor === "function") {
     loadDoctor();
     return;
   }
 
   setView(`
-    <h2>Doctor Dashboard</h2>
-    <p>Doctor dashboard is loading.</p>
+    <div class="page-header">
+      <h2>Doctor Dashboard</h2>
+      <p>Doctor dashboard is loading.</p>
+    </div>
   `);
 }
 
-function doc_schedule() {
-  if (typeof doc_showSchedule === "function") {
-    doc_showSchedule();
+function doc_appointments() {
+  if (typeof loadDoctorAppointments === "function") {
+    loadDoctorAppointments();
     return;
   }
 
   setView(`
-    <h2>My Schedule</h2>
-    <p>Schedule page is loading.</p>
+    <div class="page-header">
+      <h2>Appointments</h2>
+      <p>Doctor appointments will appear here.</p>
+    </div>
   `);
 }
 
-function doc_notes() {
-  if (typeof doc_showVisitNotes === "function") {
-    doc_showVisitNotes();
+function doc_patientHistory() {
+  if (typeof loadDoctorPatientHistory === "function") {
+    loadDoctorPatientHistory();
     return;
   }
 
   setView(`
-    <h2>Visit Notes</h2>
-    <p>Visit notes page is loading.</p>
-  `);
-}
-
-function doc_patients() {
-  if (typeof doc_showPatients === "function") {
-    doc_showPatients();
-    return;
-  }
-
-  setView(`
-    <h2>Patients</h2>
-    <p>Patients page is loading.</p>
+    <div class="page-header">
+      <h2>Patient History</h2>
+      <p>Doctor patient history view will appear here.</p>
+    </div>
   `);
 }
 

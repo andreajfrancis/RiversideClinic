@@ -24,10 +24,8 @@ function buildMenu(role) {
   if (safeRole === "doctor") {
     menu.innerHTML = `
       <button class="nav-btn" onclick="doc_home()">Dashboard</button>
-      <button class="nav-btn" onclick="doctorAppointments()">Appointments</button>
-      <button class="nav-btn" onclick="doc_schedule()">My Schedule</button>
-      <button class="nav-btn" onclick="doc_patients()">Patients</button>
-      <button class="nav-btn" onclick="doc_notes()">Visit Notes</button>
+      <button class="nav-btn" onclick="doc_appointments()">Appointments</button>
+      <button class="nav-btn" onclick="doc_patientHistory()">Patient History</button>
       <button class="nav-btn logout" onclick="doLogout()">Logout</button>
     `;
     return;
