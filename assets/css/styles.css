@@ -1893,3 +1893,69 @@ details[open] summary::before {
 .appt-week-card.gray {
   background: #ececec;
 }
+
+/* =========================
+   Sticky Footer Layout
+========================= */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main app fills available space */
+.app {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* Sidebar + main content layout */
+.sidebar {
+  width: 250px;
+  background: #3b4657;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Content area grows and pushes footer down */
+#content {
+  flex: 1;
+  min-height: 0;
+}
+
+/* =========================
+   Footer Styling
+========================= */
+
+.app-footer {
+  width: 100%;
+  background: #3b4657;
+  color: #ffffff;
+  text-align: center;
+  padding: 14px 10px;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.2px;
+  box-sizing: border-box;
+}
+
+.app-footer p {
+  margin: 4px 0;
+  line-height: 1.5;
+  opacity: 0.95;
+}
