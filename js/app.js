@@ -1,10 +1,19 @@
 // RiversideClinic/js/app.js
 
 // -----------------------------
+// Tab/session marker for forced logout on close
+// -----------------------------
+const TAB_AUTH_KEY = "rc_tab_authenticated";
+
+// -----------------------------
 // API helper (fetch + JSON)
 // -----------------------------
 async function api(url, method = "GET", body = null) {
-  const opts = { method, headers: {} };
+  const opts = {
+    method,
+    headers: {},
+    credentials: "same-origin"
+  };
 
   if (body !== null) {
     opts.headers["Content-Type"] = "application/json";
@@ -66,6 +75,20 @@ function setSidebarUser(user) {
 async function start() {
   try {
     const user = await api("api/auth/me.php");
+    const hasTabMarker = sessionStorage.getItem(TAB_AUTH_KEY) === "1";
+
+    // If server session still exists but this browser tab/window marker is gone,
+    // treat it as a closed-session reopen and force logout.
+    if (!hasTabMarker) {
+      try {
+        await api("api/auth/logout.php", "POST", {});
+      } catch (logoutErr) {
+        console.error("Forced logout failed:", logoutErr);
+      }
+
+      showLogin();
+      return;
+    }
 
     document.querySelector(".app")?.classList.remove("logged-out");
     setSidebarUser(user);
@@ -74,9 +97,7 @@ async function start() {
     renderDashboardShell(role);
 
     if (user.mustChangePassword) {
-      setTimeout(() => {
-        showFirstLoginPasswordModal();
-      }, 150);
+      showFirstLoginPasswordModal();
     }
   } catch (err) {
     showLogin();
@@ -92,6 +113,9 @@ function showLogin() {
   const menu = document.getElementById("menu");
   if (menu) menu.innerHTML = "";
 
+  const welcome = document.getElementById("welcome");
+  if (welcome) welcome.innerText = "";
+
   setSidebarUser(null);
   hideLogoutModal();
 
@@ -99,8 +123,8 @@ function showLogin() {
     <div class="login-screen">
       <div class="login-left">
         <div class="login-logo-wrap">
-          <img src="assets/images/Desert 1 Circle.png" class="login-logo" alt="Riverside Family Clinic Logo">
-          <img src="assets/images/Desert Riverside Text.png" class="login-logo-text" alt="Riverside Family Clinic">
+          <img src="assets/images/Desert 1 Circle.png" class="login-logo">
+          <img src="assets/images/Desert Riverside Text.png" class="login-logo-text">
         </div>
       </div>
 
@@ -109,16 +133,16 @@ function showLogin() {
           <div class="login-card-inner">
             <p class="login-eyebrow">Riverside Family Clinic</p>
             <h1>Welcome Back</h1>
-            <p class="login-subtext">Sign in to access the clinic portal.</p>
+            <p>Sign in to access the clinic portal.</p>
 
             <form id="loginForm" class="login-form">
               <label for="u">Username</label>
-              <input id="u" type="text" autocomplete="username">
+              <input id="u" type="text" autocomplete="username" />
 
               <label for="p">Password</label>
-              <input id="p" type="password" autocomplete="current-password">
+              <input id="p" type="password" autocomplete="current-password" />
 
-              <button type="submit" class="login-btn">Login</button>
+              <button type="submit">Login</button>
             </form>
           </div>
         </div>
@@ -152,6 +176,10 @@ async function doLogin() {
 
   try {
     await api("api/auth/login.php", "POST", { username, password });
+
+    // Mark this tab/window as authenticated.
+    sessionStorage.setItem(TAB_AUTH_KEY, "1");
+
     location.reload();
   } catch (err) {
     alert("Invalid username or password");
@@ -172,76 +200,25 @@ function showFirstLoginPasswordModal() {
 
   const overlay = document.createElement("div");
   overlay.id = "first-login-password-overlay";
-
-  overlay.style.position = "fixed";
-  overlay.style.top = "0";
-  overlay.style.left = "0";
-  overlay.style.right = "0";
-  overlay.style.bottom = "0";
-  overlay.style.width = "100vw";
-  overlay.style.height = "100vh";
-  overlay.style.background = "rgba(0, 0, 0, 0.55)";
-  overlay.style.display = "flex";
-  overlay.style.alignItems = "center";
-  overlay.style.justifyContent = "center";
-  overlay.style.zIndex = "999999";
-  overlay.style.padding = "20px";
-  overlay.style.boxSizing = "border-box";
-
   overlay.innerHTML = `
-    <div id="first-login-password-modal-box" style="
-      background: #ffffff;
-      color: #111827;
-      width: 100%;
-      max-width: 480px;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      font-family: Arial, sans-serif;
-    ">
-      <h2 style="margin-top:0; margin-bottom:10px;">Change Temporary Password</h2>
-      <p style="margin-top:0; margin-bottom:16px;">
-        This is your first login. You must create a new password before continuing.
-      </p>
+    <div class="first-login-password-modal">
+      <h2>Change Temporary Password</h2>
+      <p>This is your first login. You must create a new password before continuing.</p>
 
-      <label for="firstLoginNewPassword" style="display:block; margin-top:12px; font-weight:600;">New Password</label>
-      <input id="firstLoginNewPassword" type="password" style="
-        width:100%;
-        margin-top:6px;
-        margin-bottom:12px;
-        padding:10px;
-        box-sizing:border-box;
-        border:1px solid #cbd5e1;
-        border-radius:8px;
-      ">
+      <label for="firstLoginNewPassword">New Password</label>
+      <input id="firstLoginNewPassword" type="password" />
 
-      <label for="firstLoginConfirmPassword" style="display:block; font-weight:600;">Confirm New Password</label>
-      <input id="firstLoginConfirmPassword" type="password" style="
-        width:100%;
-        margin-top:6px;
-        margin-bottom:12px;
-        padding:10px;
-        box-sizing:border-box;
-        border:1px solid #cbd5e1;
-        border-radius:8px;
-      ">
+      <label for="firstLoginConfirmPassword">Confirm New Password</label>
+      <input id="firstLoginConfirmPassword" type="password" />
 
-      <div id="firstLoginPasswordMsg" style="margin-bottom:12px; color:#b91c1c; min-height:20px;"></div>
+      <div id="firstLoginPasswordMsg"></div>
 
-      <p style="font-size:14px; margin-bottom:16px; line-height:1.4;">
+      <p>
         Password must be at least 8 characters and include:
         1 uppercase letter, 1 lowercase letter, and 1 special character.
       </p>
 
-      <button onclick="submitFirstLoginPasswordChange()" style="
-        width:100%;
-        padding:12px;
-        cursor:pointer;
-        border:none;
-        border-radius:8px;
-      ">
-        Save New Password
-      </button>
+      <button type="button" onclick="submitFirstLoginPasswordChange()">Save New Password</button>
     </div>
   `;
 
@@ -250,7 +227,7 @@ function showFirstLoginPasswordModal() {
   const newPasswordInput = document.getElementById("firstLoginNewPassword");
   const confirmPasswordInput = document.getElementById("firstLoginConfirmPassword");
 
-  [newPasswordInput, confirmPasswordInput].forEach(input => {
+  [newPasswordInput, confirmPasswordInput].forEach((input) => {
     input?.addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -283,25 +260,16 @@ async function submitFirstLoginPasswordChange() {
   }
 
   try {
-    await api("api/auth/change_password.php", "POST", {
-      newPassword,
-      confirmPassword
-    });
+    await api("api/auth/change_password.php", "POST", { newPassword, confirmPassword });
 
-    if (msg) {
-      msg.style.color = "#166534";
-      msg.innerHTML = "Password updated";
-    }
+    if (msg) msg.innerHTML = "Password updated";
 
     setTimeout(() => {
       document.getElementById("first-login-password-overlay")?.remove();
       location.reload();
     }, 500);
   } catch (err) {
-    if (msg) {
-      msg.style.color = "#b91c1c";
-      msg.innerHTML = err?.error || err || "Unable to update password";
-    }
+    if (msg) msg.innerHTML = err?.error || err || "Unable to update password";
   }
 }
 
@@ -338,10 +306,8 @@ function renderDashboardShell(role) {
   }
 
   setView(`
-    <div class="card">
-      <h2>Unknown role: ${role}</h2>
-      <button onclick="doLogout()">Logout</button>
-    </div>
+    <h2>Unknown role: ${role}</h2>
+    <button onclick="doLogout()">Logout</button>
   `);
 }
 
@@ -378,6 +344,9 @@ function doLogout() {
 }
 
 async function confirmLogout() {
+  // Clear the tab/window marker first.
+  sessionStorage.removeItem(TAB_AUTH_KEY);
+
   try {
     await api("api/auth/logout.php", "POST", {});
   } catch (e) {
@@ -402,10 +371,8 @@ function admin_home() {
   }
 
   setView(`
-    <div class="card">
-      <h2>Administrator Dashboard</h2>
-      <p>Admin dashboard is loading.</p>
-    </div>
+    <h2>Administrator Dashboard</h2>
+    <p>Admin dashboard is loading.</p>
   `);
 }
 
@@ -416,10 +383,8 @@ function admin_users() {
   }
 
   setView(`
-    <div class="card">
-      <h2>User Management</h2>
-      <p>User management page coming soon.</p>
-    </div>
+    <h2>User Management</h2>
+    <p>User management page coming soon.</p>
   `);
 }
 
@@ -430,21 +395,17 @@ function admin_reports() {
   }
 
   setView(`
-    <div class="card">
-      <h2>Reports</h2>
-      <p>Review clinic activity and reporting summaries.</p>
-      <p>Reports page coming soon.</p>
-    </div>
+    <h2>Reports</h2>
+    <p>Review clinic activity and reporting summaries.</p>
+    <p>Reports page coming soon.</p>
   `);
 }
 
 function admin_settings() {
   setView(`
-    <div class="card">
-      <h2>Settings</h2>
-      <p>Adjust clinic system preferences and admin settings.</p>
-      <p>Settings page coming soon.</p>
-    </div>
+    <h2>Settings</h2>
+    <p>Adjust clinic system preferences and admin settings.</p>
+    <p>Settings page coming soon.</p>
   `);
 }
 
@@ -458,10 +419,8 @@ function doc_home() {
   }
 
   setView(`
-    <div class="card">
-      <h2>Doctor Dashboard</h2>
-      <p>Doctor dashboard is loading.</p>
-    </div>
+    <h2>Doctor Dashboard</h2>
+    <p>Doctor dashboard is loading.</p>
   `);
 }
 
@@ -472,10 +431,8 @@ function doc_appointments() {
   }
 
   setView(`
-    <div class="card">
-      <h2>Appointments</h2>
-      <p>Doctor appointments will appear here.</p>
-    </div>
+    <h2>Appointments</h2>
+    <p>Doctor appointments will appear here.</p>
   `);
 }
 
@@ -486,40 +443,44 @@ function doc_patientHistory() {
   }
 
   setView(`
-    <div class="card">
-      <h2>Patient History</h2>
-      <p>Doctor patient history view will appear here.</p>
-    </div>
+    <h2>Patient History</h2>
+    <p>Doctor patient history view will appear here.</p>
   `);
 }
 
 // -----------------------------
 // Nurse Views
 // -----------------------------
+function nurse_home() {
+  if (typeof loadNurse === "function") {
+    loadNurse();
+    return;
+  }
+
+  setView(`
+    <h2>Nurse Dashboard</h2>
+    <p>Nurse dashboard is loading.</p>
+  `);
+}
+
 function nurse_patients() {
   setView(`
-    <div class="card">
-      <h2>Assigned Patients</h2>
-      <p>TODO: Nurse patient list.</p>
-    </div>
+    <h2>Assigned Patients</h2>
+    <p>TODO: Nurse patient list.</p>
   `);
 }
 
 function nurse_vitals() {
   setView(`
-    <div class="card">
-      <h2>Vitals</h2>
-      <p>TODO: Record patient vitals.</p>
-    </div>
+    <h2>Vitals</h2>
+    <p>TODO: Record patient vitals.</p>
   `);
 }
 
 function nurse_tasks() {
   setView(`
-    <div class="card">
-      <h2>Tasks</h2>
-      <p>TODO: Nurse task queue.</p>
-    </div>
+    <h2>Tasks</h2>
+    <p>TODO: Nurse task queue.</p>
   `);
 }
 
@@ -533,10 +494,8 @@ function rx_home() {
   }
 
   setView(`
-    <div class="card">
-      <h2>Receptionist Dashboard</h2>
-      <p>TODO: Check-in, appointments, patient search.</p>
-    </div>
+    <h2>Receptionist Dashboard</h2>
+    <p>TODO: Check-in, appointments, patient search.</p>
   `);
 }
 
@@ -552,10 +511,8 @@ function rx_patients() {
   }
 
   setView(`
-    <div class="card">
-      <h2>Patients</h2>
-      <p>Patient registration is not available right now.</p>
-    </div>
+    <h2>Patients</h2>
+    <p>Patient registration is not available right now.</p>
   `);
 }
 
@@ -571,10 +528,8 @@ function rx_appointments() {
   }
 
   setView(`
-    <div class="card">
-      <h2>Appointments</h2>
-      <p>Appointments are not available right now.</p>
-    </div>
+    <h2>Appointments</h2>
+    <p>Appointments are not available right now.</p>
   `);
 }
 
@@ -585,10 +540,8 @@ function rx_checkin() {
   }
 
   setView(`
-    <div class="card">
-      <h2>Check-In</h2>
-      <p>Front desk check-in workflow is not available right now.</p>
-    </div>
+    <h2>Check-In</h2>
+    <p>Front desk check-in workflow is not available right now.</p>
   `);
 }
 
