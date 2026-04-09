@@ -93,12 +93,32 @@ async function start() {
     document.querySelector(".app")?.classList.remove("logged-out");
     setSidebarUser(user);
 
+    // Force password change before any dashboard/menu access
+    if (user.mustChangePassword) {
+      const menu = document.getElementById("menu");
+      if (menu) menu.innerHTML = "";
+
+      const welcome = document.getElementById("welcome");
+      if (welcome) welcome.innerText = "";
+
+      const content = document.getElementById("content");
+      if (content) {
+        content.innerHTML = `
+          <div class="password-lock-screen">
+            <div class="password-lock-card">
+              <h2>Password Change Required</h2>
+              <p>You must change your temporary password before continuing.</p>
+            </div>
+          </div>
+        `;
+      }
+
+      showFirstLoginPasswordModal();
+      return;
+    }
+
     const role = normalizeRole(user.role);
     renderDashboardShell(role);
-
-    if (user.mustChangePassword) {
-      showFirstLoginPasswordModal();
-    }
   } catch (err) {
     showLogin();
   }
