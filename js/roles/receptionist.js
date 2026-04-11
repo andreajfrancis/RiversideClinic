@@ -110,7 +110,7 @@ async function rx_loadTilesAndNext(){
       <div class="section-title">
         <h3>Receptionist Queue</h3>
         <div class="tools">
-          <button class="ghost" onclick="rx_loadTilesAndNext()">Refresh</button>
+          <button class="admin-create-submit" type="button" onclick="rx_loadTilesAndNext()">Refresh</button>
         </div>
       </div>
       <table>
@@ -132,7 +132,7 @@ async function rx_loadTilesAndNext(){
       <td>${a.Patient_Last}, ${a.Patient_First}</td>
       <td>Dr. ${a.Provider_Last}</td>
       <td><span class="${badgeClass(a.Status)}">${a.Status}</span></td>
-      <td><button class="small primary" onclick="rx_billAndReschedule(${a.Appointment_ID})">Bill / Reschedule</button></td>
+      <td><button class="small admin-create-submit" onclick="rx_billAndReschedule(${a.Appointment_ID})">Bill / Reschedule</button></td>
     </tr>
   `).join("");
 
@@ -249,8 +249,8 @@ async function rx_openCheckIn(appointmentId) {
         <div id="rx_checkin_msg" style="margin-top:10px;"></div>
       `,
       `
-        <button class="ghost" onclick="rx_closeModal()">Close</button>
-        <button class="primary" onclick="rx_saveCheckIn(${appointmentId})">Check In Patient</button>
+        <button class="admin-create-submit" onclick="rx_closeModal()">Close</button>
+        <button class="admin-create-submit" onclick="rx_saveCheckIn(${appointmentId})">Check In Patient</button>
       `
     );
   } catch (err) {
@@ -500,7 +500,7 @@ function rx_showPatientCreate() {
     </div>
 
     <div class="row" style="margin-top:12px;">
-      <button class="primary" onclick="rx_createPatient()">Register Patient</button>
+      <button class="admin-create-submit" onclick="rx_createPatient()">Register Patient</button>
     </div>
 
     <div id="rx_msg" style="margin-top:10px;"></div>
@@ -512,7 +512,7 @@ function rx_showPatientSearch(){
     <div class="section-title">
       <h3>Search Patients</h3>
       <div class="tools">
-        <button class="ghost" onclick="rx_panel('')">Close</button>
+        <button class="admin-create-submit" onclick="rx_panel('')">Close</button>
       </div>
     </div>
 
@@ -522,7 +522,7 @@ function rx_showPatientSearch(){
         <input id="rx_search" placeholder="Name / phone / email">
       </div>
       <div style="align-self:end;">
-        <button class="primary" onclick="rx_patientSearch()">Search</button>
+        <button class="admin-create-submit" onclick="rx_patientSearch()">Search</button>
       </div>
     </div>
 
@@ -546,7 +546,7 @@ async function rx_patientSearch(){
       <td>${p.Phone_Number}</td>
       <td>${p.Email ?? ""}</td>
       <td>${p.Date_Of_Birth}</td>
-      <td><button class="small" onclick='rx_editPatient(${JSON.stringify(p)})'>Edit</button></td>
+      <td><button class="small admin-create-submit" onclick='rx_editPatient(${JSON.stringify(p)})'>Edit</button></td>
     </tr>
   `).join("");
 

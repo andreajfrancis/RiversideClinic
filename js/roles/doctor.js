@@ -19,8 +19,8 @@ function loadDoctor() {
       <div class="row compact" style="margin-top:14px;">
         <div class="field"><label>From</label><input id="d_from" type="date" value="${today}"></div>
         <div class="field"><label>To</label><input id="d_to" type="date" value="${today}"></div>
-        <div style="align-self:end;"><button class="primary" onclick="doc_loadSchedule()">Load Schedule</button></div>
-        <div style="align-self:end;"><button class="ghost" onclick="doc_refreshDay()">Refresh Day</button></div>
+        <div style="align-self:end;"><button class="admin-create-submit" onclick="doc_loadSchedule()">Load Schedule</button></div>
+        <div style="align-self:end;"><button class="admin-create-submit" onclick="doc_refreshDay()">Refresh Day</button></div>
       </div>
       <div id="doc_queue" style="margin-top:16px;"></div>
       <div id="doc_list" style="margin-top:16px;"></div>
@@ -88,7 +88,7 @@ function doc_filterPatients() {
       <td>${escapeHtml(p.First_Name)}</td>
       <td>${p.Birth_Date || ""}</td>
       <td>
-        <button class="small" onclick="doc_openPatient(${p.Patient_ID})">Open</button>
+        <button class="small admin-create-submit" onclick="doc_openPatient(${p.Patient_ID})">Open</button>
       </td>
     </tr>
   `).join("");
@@ -135,7 +135,7 @@ async function doc_openPatient(patientId) {
       <div class="section-title">
         <h3>Patient Appointments</h3>
         <div class="tools">
-          <button class="ghost" onclick="loadDoctorPatientHistory()">Back</button>
+          <button class="admin-create-submit" onclick="loadDoctorPatientHistory()">Back</button>
         </div>
       </div>
 
@@ -154,9 +154,9 @@ async function doc_openPatient(patientId) {
         <td>${fmtDT(a.Scheduled_Start)}</td>
         <td><span class="${badgeClass(a.Status)}">${a.Status}</span></td>
         <td>
-          <button class="small" onclick="doc_open(${a.Appointment_ID}, 'historyPatient', ${patientId}, true)">
-            Review
-          </button>
+          <button class="small admin-create-submit" onclick="doc_open(${a.Appointment_ID}, 'historyPatient', ${patientId}, true)">
+  Review
+</button>
         </td>
       </tr>
     `).join("");
@@ -224,8 +224,8 @@ async function doc_openExamPage(appointmentId, backTarget = "history", backPatie
     const tools = document.getElementById("doc_exam_tools");
     if (tools) {
       tools.innerHTML = `
-        ${allowUnlock ? `<button class="secondary" onclick="doc_unlockExam(${appointmentId}, '${backTarget}', ${backPatientId ?? "null"})">Unlock</button>` : ""}
-        <button class="ghost" onclick="${backHtml}">Back</button>
+        ${allowUnlock ? `<button class="admin-create-submit" onclick="doc_unlockExam(${appointmentId}, '${backTarget}', ${backPatientId ?? "null"})">Unlock</button>` : ""}
+        <button class="admin-create-submit" onclick="${backHtml}">Back</button>
       `;
     }
 
@@ -321,7 +321,7 @@ async function doc_openExamPage(appointmentId, backTarget = "history", backPatie
       </div>
 
       <div style="margin-top:10px;">
-        ${effectiveReadOnly ? "" : `<button class="secondary" onclick="doc_addMedication()">Add Medication</button>`}
+        ${effectiveReadOnly ? "" : `<button class="admin-create-submit" onclick="doc_addMedication()">Add Medication</button>`}
       </div>
 
       <div id="doc_med_list" style="margin-top:12px;"></div>
@@ -333,7 +333,7 @@ async function doc_openExamPage(appointmentId, backTarget = "history", backPatie
 
       <div style="margin-top:12px;">
         ${effectiveReadOnly ? "" : `
-          <button class="primary" onclick="doc_saveExam(${appointmentId}, ${visit.Visit_ID}, '${backTarget}', ${backPatientId ?? "null"})">
+          <button class="admin-create-submit" onclick="doc_saveExam(${appointmentId}, ${visit.Visit_ID}, '${backTarget}', ${backPatientId ?? "null"})">
             Save Exam
           </button>
         `}
@@ -410,7 +410,7 @@ function doctor_openModal(title, subtitle, bodyHtml, footerHtml = "") {
             <h3>${title}</h3>
             ${subtitle ? `<div class="appt-modal-sub">${subtitle}</div>` : ""}
           </div>
-          <button class="ghost" onclick="doctor_closeModal()">Close</button>
+          <button class="admin-create-submit" onclick="doctor_closeModal()">Close</button>
         </div>
 
         <div class="doctor-modal-body">
@@ -464,13 +464,13 @@ async function doc_loadTilesAndQueue() {
       <td>${fmtDT(a.Scheduled_Start)}</td>
       <td>${escapeHtml(a.Patient_Last)}, ${escapeHtml(a.Patient_First)}</td>
       <td>${a.Date_Of_Birth || ''}</td>
-      <td><button class="small primary" onclick="doc_open(${a.Appointment_ID}, 'dashboard')">Complete Exam</button></td>
+      <td><button class="small admin-create-submit" onclick="doc_open(${a.Appointment_ID}, 'dashboard')">Complete Exam</button></td>
     </tr>
   `).join("");
 
   queueWrap.innerHTML = `
     <div class="section">
-      <div class="section-title"><h3>Doctor Queue</h3><div class="tools"><button class="ghost" onclick="doc_loadTilesAndQueue()">Refresh</button></div></div>
+      <div class="section-title"><h3>Doctor Queue</h3><div class="tools"><button class="admin-create-submit" onclick="doc_loadTilesAndQueue()">Refresh</button></div></div>
       <table><thead><tr><th>Scheduled</th><th>Patient</th><th>DOB</th><th>Action</th></tr></thead><tbody>${rows || `<tr><td colspan="4">No patients ready for provider.</td></tr>`}</tbody></table>
     </div>
   `;
@@ -493,7 +493,7 @@ async function doc_loadSchedule() {
       <td>${fmtDT(a.Scheduled_End)}</td>
       <td><span class="${badgeClass(a.Status)}">${a.Status}</span></td>
       <td>${escapeHtml(a.Patient_Last)}, ${escapeHtml(a.Patient_First)}</td>
-      <td><button class="small" onclick="doc_open(${a.Appointment_ID}, 'appointments')">Open</button></td>
+      <td><button class="small admin-create-submit" onclick="doc_open(${a.Appointment_ID}, 'appointments')">Open</button></td>
     </tr>
   `).join("");
 
@@ -568,7 +568,7 @@ function doc_renderMedications() {
   const rows = docMedications.map((m, i) => `
     <div style="padding:6px; border-bottom:1px solid #ddd;">
       ${m.name} - ${m.amount} - ${m.instructions}
-      <button class="ghost small" onclick="doc_removeMedication(${i})">Remove</button>
+      <button class="small admin-create-submit" onclick="doc_removeMedication(${i})">Remove</button>
     </div>
   `).join("");
 

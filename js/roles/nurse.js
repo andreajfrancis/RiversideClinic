@@ -123,8 +123,8 @@ async function nurse_renderIntakeForm(appointmentId) {
     <div class="field" style="margin-top:14px;"><label>Medication Notes</label><textarea id="ni_med_notes" rows="3">${i.Medication_Notes || ''}</textarea></div>
 
     <div class="row" style="margin-top:16px;">
-      <button class="primary" onclick="nurse_saveIntake(${appointmentId})">Save Intake</button>
-      <button class="ghost" onclick="nurse_home()">Back to Dashboard</button>
+      <button class="admin-create-submit" onclick="nurse_saveIntake(${appointmentId})">Save Intake</button>
+      <button class="admin-create-submit" onclick="nurse_home()">Back to Dashboard</button>
     </div>
     <div id="nurse_intake_msg" style="margin-top:12px;"></div>
   `;
