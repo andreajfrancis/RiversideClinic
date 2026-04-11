@@ -518,7 +518,7 @@ function admin_showCreateUser() {
         <input id="cu_username" placeholder="Username">
         <input id="cu_password" type="password" placeholder="Temporary Password">
 
-        <button class="primary" onclick="admin_createUser()">Create User</button>
+        <button class="admin-create-submit" onclick="admin_createUser()">Create User</button>
 
       </div>
 
@@ -636,7 +636,7 @@ function admin_editUser(userId) {
           <input id="eu_password" type="password" placeholder="New Temporary Password">
           <input id="eu_password_confirm" type="password" placeholder="Confirm New Password">
 
-          <button class="primary" type="button" onclick="admin_updateUser(${Number(user.User_ID)})">Save Changes</button>
+          <button class="admin-create-submit" type="button" onclick="admin_updateUser(${Number(user.User_ID)})">Save Changes</button>
         </div>
       </div>
     </div>
@@ -1213,7 +1213,7 @@ function admin_clinicHours() {
       <div id="clinic_hours_wrap">Loading clinic hours...</div>
 
       <div class="row" style="margin-top:16px;">
-        <button class="primary" onclick="admin_saveClinicHours()">Save Clinic Hours</button>
+        <button class="admin-create-submit" onclick="admin_saveClinicHours()">Save Clinic Hours</button>
       </div>
 
       <div id="clinic_hours_msg" style="margin-top:12px;"></div>
@@ -1372,7 +1372,7 @@ function admin_staff() {
       </div>
 
       <div class="row" style="margin-top:16px;">
-        <button class="primary" onclick="admin_saveSchedule()">Add Schedule Block</button>
+        <button class="admin-create-submit" onclick="admin_saveSchedule()">Add Schedule Block</button>
       </div>
 
       <div id="sched_msg" style="margin-top:12px;"></div>

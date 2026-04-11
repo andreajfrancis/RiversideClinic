@@ -172,8 +172,9 @@ button:hover{ filter: brightness(1.05); }
 button:active{ transform: translateY(1px); }
 
 button.secondary{
-  background: var(--teal-soft);
-  color: var(--teal-dark);
+  background: #0090F7;
+  color: #3F3C78;
+  border: none;
 }
 
 button.ghost{
@@ -372,7 +373,7 @@ td button{
 
 /* Button variants (content area) */
 button.primary{ background: var(--teal-dark); color:#fff; }
-button.secondary{ background: var(--teal-soft); color: var(--teal-dark); }
+button.secondary{ background: #0090F7; color:#3F3C78; }
 button.gold{ background: var(--gold); color: #1E2A2A; }
 button.ghost{ background: transparent; border: 1px solid var(--border); color: var(--teal-dark); }
 
@@ -521,8 +522,8 @@ button.block{ width:100%; }
   height:40px;
   border:none;
   border-radius:12px;
-  background:var(--teal);
-  color:#fff;
+  background:#0090F7;
+  color:#3F3C78;
   font-weight:800;
   font-size:16px;
   display:inline-flex;
@@ -532,6 +533,10 @@ button.block{ width:100%; }
   padding:0 18px;
   box-shadow:none;
   cursor:pointer;
+}
+
+.admin-add-user-btn:hover{
+  filter: brightness(1.08);
 }
 
 .admin-add-user-btn .plus{
@@ -697,14 +702,18 @@ button.block{ width:100%; }
 }
 
 .admin-create-submit{
-  background:var(--teal);
-  color:#fff;
+  background:#0090F7;
+  color:#3F3C78;
   min-width:126px;
   height:40px;
   border:none;
   border-radius:12px;
   font-size:16px;
   cursor:pointer;
+}
+
+.admin-create-submit:hover{
+  filter: brightness(1.08);
 }
 
 .admin-create-cancel{
@@ -941,20 +950,20 @@ button.block{ width:100%; }
 }
 
 .login-btn{
-  margin-top:10px;
-  width:100%;
-  height:48px;
-  border:none;
-  border-radius:14px;
-  background:#0090F7;
-  color:#fff;
-  font-size:15px;
-  font-weight:700;
-  cursor:pointer;
+ margin-top:10px;
+ width:100%;
+ height:48px;
+ border:none;
+ border-radius:14px;
+ background:#0090F7;   /* match dashboard buttons */
+ color:#3F3C78;
+ font-size:15px;
+ font-weight:700;
+ cursor:pointer;
 }
 
 .login-btn:hover{
-  filter:brightness(1.05);
+ filter:brightness(1.08);
 }
 
 /* Responsive */
@@ -1034,8 +1043,8 @@ button.block{ width:100%; }
 }
 
 .admin-export-csv-btn {
-  background: #5b8f93;
-  color: #fff;
+  background: #0090F7;
+  color: #3F3C78;
   border: none;
   border-radius: 12px;
   padding: 10px 16px;
@@ -1044,7 +1053,7 @@ button.block{ width:100%; }
 }
 
 .admin-export-csv-btn:hover {
-  background: #4f7f82;
+  filter: brightness(1.08);
 }
 
 .admin-event-filters-grid {
@@ -1181,8 +1190,18 @@ button.block{ width:100%; }
   width: 64px;
   height: 64px;
   margin: 0 auto 18px;
-  border-radius: 50%;
-  background: #d5ae60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border-radius: 0;
+}
+
+.logout-modal-icon img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  display: block;
 }
 
 .logout-modal-card h2 {
@@ -1220,18 +1239,18 @@ button.block{ width:100%; }
 }
 
 .logout-confirm-btn {
-  background: #5e9c9f;
-  color: #ffffff;
+  background: #0090F7;
+  color: #3F3C78;
   border: none;
   border-radius: 10px;
   padding: 10px 22px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: filter 0.2s ease;
 }
 
 .logout-confirm-btn:hover {
-  background: #4c888b;
+  filter: brightness(1.08);
 }
 
 @keyframes modalPop {
@@ -1322,8 +1341,8 @@ button.block{ width:100%; }
 }
 
 .admin-action-btn {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: #0090F7;
+  color: #3F3C78;
   border: none;
   border-radius: 12px;
   padding: 10px 16px;
@@ -1333,7 +1352,7 @@ button.block{ width:100%; }
 }
 
 .admin-action-btn:hover {
-  background: #bfdbfe;
+  filter: brightness(1.08);
   transform: translateY(-1px);
 }
 
@@ -2012,3 +2031,333 @@ body {
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
   text-align: center;
 }
+
+/* FORCE login button style */
+.login-btn,
+button.login-btn,
+.login-form button,
+.login-form button[type="submit"]{
+  background: #0090F7 !important;
+  color: #3F3C78 !important;
+  border: none !important;
+}
+
+.login-btn:hover,
+button.login-btn:hover,
+.login-form button:hover,
+.login-form button[type="submit"]:hover{
+  filter: brightness(1.08);
+}
+
+.admin-actions-cell button,
+.admin-actions-cell button.secondary{
+  background: #0090F7 !important;
+  color: #3F3C78 !important;
+  border: none !important;
+}
+
+.admin-actions-cell button:hover,
+.admin-actions-cell button.secondary:hover{
+  filter: brightness(1.08);
+}
+
+/* Edit button (User Management) */
+.admin-actions-cell button:first-child{
+  background: #78673C !important;
+  color: #000000 !important;
+  border: none !important;
+}
+
+.admin-actions-cell button:first-child:hover{
+  filter: brightness(1.08);
+}
+
+/* Force Create User button color */
+.admin-create-user-card .admin-create-submit,
+.admin-create-user-card button.admin-create-submit,
+.admin-create-user-card button[type="submit"]{
+  background: #0090F7 !important;
+  color: #3F3C78 !important;
+  border: none !important;
+}
+
+.admin-create-user-card .admin-create-submit:hover,
+.admin-create-user-card button.admin-create-submit:hover,
+.admin-create-user-card button[type="submit"]:hover{
+  filter: brightness(1.08);
+}
+
+/* Global dashboard text color (match Administrator Dashboard title) */
+.admin-home-wrap,
+.admin-home-wrap h1,
+.admin-home-wrap h2,
+.admin-home-wrap h3,
+.admin-home-wrap h4,
+.admin-home-wrap h5,
+.admin-home-wrap h6,
+.admin-home-wrap p,
+.admin-home-wrap span,
+.admin-home-wrap label,
+.admin-home-wrap td,
+.admin-home-wrap th,
+.admin-home-wrap li,
+.admin-panel-box,
+.admin-panel-box * ,
+.card,
+.card * {
+  color: #1f3b57;
+}
+
+/* Fix Event Logs section text color */
+
+/* Section titles (Filter Event Logs, Event Log History) */
+.section-title h3 {
+  color: #1f3b57 !important;
+}
+
+/* Form labels (Action Type, User, etc.) */
+.field label {
+  color: #1f3b57 !important;
+}
+
+/* Event log headers and text */
+.admin-event-shell h3,
+.admin-event-shell label,
+.admin-event-shell span,
+.admin-event-shell div {
+  color: #1f3b57 !important;
+}
+
+/* =========================
+   Appointments text color
+   ========================= */
+
+.appt-shell,
+.appt-shell h1,
+.appt-shell h2,
+.appt-shell h3,
+.appt-shell h4,
+.appt-shell p,
+.appt-shell span,
+.appt-shell label,
+.appt-shell td,
+.appt-shell th,
+.appt-shell div {
+  color: #1f3b57;
+}
+
+.appt-page-header h2,
+.appt-subdate,
+.appt-date-pill,
+.appt-head,
+.appt-time-cell,
+.appt-patient,
+.appt-type,
+.appt-duration,
+.appt-modal-header h3,
+.appt-modal-sub,
+.appt-week-head {
+  color: #1f3b57 !important;
+}
+
+/* =========================
+   Appointments buttons
+   ========================= */
+
+.appt-nav-btn,
+.appt-view-toggle button,
+.appt-modal-footer button,
+.appt-modal-header button,
+.appt-week-card button,
+.appt-shell button.primary,
+.appt-shell button.secondary,
+.appt-shell button.ghost,
+.appt-shell button.gold,
+#appt_patient_selected .ok {
+  background: #0090F7 !important;
+  color: #3F3C78 !important;
+  border: none !important;
+}
+
+.appt-nav-btn:hover,
+.appt-view-toggle button:hover,
+.appt-modal-footer button:hover,
+.appt-modal-header button:hover,
+.appt-week-card button:hover,
+.appt-shell button.primary:hover,
+.appt-shell button.secondary:hover,
+.appt-shell button.ghost:hover,
+.appt-shell button.gold:hover,
+#appt_patient_selected .ok:hover {
+  filter: brightness(1.08);
+}
+
+/* Make Week button white */
+.appt-view-toggle button:last-child {
+  background: #ffffff !important;
+  color: #1f3b57 !important;
+  border: 1px solid #0090F7 !important;
+}
+
+.appt-view-toggle button:last-child:hover {
+  filter: brightness(0.95);
+}
+
+/* =========================
+   Receptionist text color
+   ========================= */
+
+/* Main receptionist dashboard text */
+#dash_view .card,
+#dash_view .card h1,
+#dash_view .card h2,
+#dash_view .card h3,
+#dash_view .card h4,
+#dash_view .card p,
+#dash_view .card span,
+#dash_view .card label,
+#dash_view .card td,
+#dash_view .card th,
+#dash_view .card div {
+  color: #1f3b57;
+}
+
+/* Section titles (Receptionist Queue, Checkout Queue, etc.) */
+#dash_view .section-title h3 {
+  color: #1f3b57 !important;
+}
+
+/* Form labels */
+#dash_view .field label {
+  color: #1f3b57 !important;
+}
+
+/* Modal text (Check In / Billing) */
+.appt-modal h3,
+.appt-modal label,
+.appt-modal span,
+.appt-modal div {
+  color: #1f3b57 !important;
+}
+
+/* =========================
+   Nurse dashboard text color
+   ========================= */
+
+/* Main nurse dashboard text */
+#dash_view .card,
+#dash_view .card h1,
+#dash_view .card h2,
+#dash_view .card h3,
+#dash_view .card h4,
+#dash_view .card p,
+#dash_view .card span,
+#dash_view .card label,
+#dash_view .card td,
+#dash_view .card th,
+#dash_view .card div {
+  color: #1f3b57;
+}
+
+/* Section title (Nurse Queue) */
+#dash_view .section-title h3 {
+  color: #1f3b57 !important;
+}
+
+/* Form labels (intake fields) */
+#dash_view .field label {
+  color: #1f3b57 !important;
+}
+
+/* =========================
+   Doctor dashboard text color
+   ========================= */
+
+/* Main doctor dashboard text */
+#content .card,
+#content .card h1,
+#content .card h2,
+#content .card h3,
+#content .card h4,
+#content .card p,
+#content .card span,
+#content .card label,
+#content .card td,
+#content .card th,
+#content .card div {
+  color: #1f3b57;
+}
+
+/* Section titles (Doctor Queue, Schedule, Patient Appointments, etc.) */
+#content .section-title h3 {
+  color: #1f3b57 !important;
+}
+
+/* Form labels (exam page) */
+#content .field label {
+  color: #1f3b57 !important;
+}
+
+/* Modal text (doctor modals) */
+.appt-modal h3,
+.appt-modal label,
+.appt-modal span,
+.appt-modal div {
+  color: #1f3b57 !important;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.section-title {
+  margin-bottom: 10px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+td {
+  padding: 10px 6px;
+}
+
+p,
+.sub,
+.hint {
+  opacity: 0.75;
+}
+
+.tile .sub {
+  opacity: 0.7;
+}
+
+button {
+  border-radius: 12px;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+input,
+select,
+textarea {
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  padding: 8px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #0090F7;
+  box-shadow: 0 0 0 2px rgba(0,144,247,0.2);
+}
+
