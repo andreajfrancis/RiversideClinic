@@ -1,6 +1,6 @@
 <?php
 require_once "../utils.php";
-require_role("Doctor");
+$user = require_role("Doctor");
 
 $data = read_json();
 $appointmentId = (int)($data["appointmentId"] ?? 0);
@@ -29,7 +29,13 @@ if ($appointmentId <= 0) {
   exit;
 }
 
-$stmt = $pdo->prepare("UPDATE Appointment SET Status=? WHERE Appointment_ID=?");
-$stmt->execute([$status, $appointmentId]);
+$stmt = $pdo->prepare("UPDATE Appointment SET Status=? WHERE Appointment_ID=? AND Provider_User_ID=?");
+$stmt->execute([$status, $appointmentId, (int)$user["id"]]);
+
+if ($stmt->rowCount() === 0) {
+  http_response_code(403);
+  echo json_encode(["error" => "Unauthorized to update this appointment"]);
+  exit;
+}
 
 echo json_encode(["success" => true]);
