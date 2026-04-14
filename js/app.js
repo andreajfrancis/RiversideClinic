@@ -531,14 +531,26 @@ function rx_patients() {
   `);
 }
 
-function rx_appointments() {
+function rx_patientInfo() {
   if (typeof loadReceptionist === "function") {
     loadReceptionist();
     setTimeout(() => {
-      if (typeof rx_showAppointmentBoard === "function") {
-        rx_showAppointmentBoard();
+      if (typeof rx_showPatientSearchInfo === "function") {
+        rx_showPatientSearchInfo();
       }
     }, 0);
+    return;
+  }
+
+  setView(`
+    <h2>Search Patient Info</h2>
+    <p>Patient lookup is not available right now.</p>
+  `);
+}
+
+function rx_appointments() {
+  if (typeof receptionistAppointments === "function") {
+    receptionistAppointments();
     return;
   }
 
