@@ -227,3 +227,10 @@ async function nurse_saveIntake(appointmentId) {
   toast("Success", "Patient moved to Ready for Provider.", "ok");
   nurse_home();
 }
+
+window.nurse_home = nurse_home;
+window.nurseAppointments = nurseAppointments;
+window.nurse_schedule = nurse_schedule;
+window.nurse_openIntake = nurse_openIntake;
+window.nurse_intake = nurse_intake;
+window.nurse_saveIntake = nurse_saveIntake;
