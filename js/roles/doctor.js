@@ -580,7 +580,11 @@ function doc_removeMedication(index) {
   doc_renderMedications();
 }
 
+window.doc_home = doc_home;
+window.doc_appointments = doc_appointments;
+window.doc_patientHistory = doc_patientHistory;
 window.doc_openPatient = doc_openPatient;
 window.loadDoctorPatientHistory = loadDoctorPatientHistory;
 window.loadDoctorAppointments = loadDoctorAppointments;
-window.doc_home = doc_home;
+window.doc_open = doc_open;
+window.doc_refreshDay = doc_refreshDay;
