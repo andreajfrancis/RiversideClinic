@@ -188,7 +188,7 @@ async function doc_openExamPage(appointmentId, backTarget = "history", backPatie
   if (!content) return;
 
   let backHtml = `loadDoctorPatientHistory()`;
-  if (backTarget === "dashboard") backHtml = `doc_home()`;
+    if (backTarget === "dashboard") backHtml = `loadDoctor()`;
   if (backTarget === "appointments") backHtml = `loadDoctorAppointments()`;
   if (backTarget === "historyPatient" && backPatientId) backHtml = `doc_openPatient(${backPatientId})`;
 
@@ -580,11 +580,9 @@ function doc_removeMedication(index) {
   doc_renderMedications();
 }
 
-window.doc_home = doc_home;
-window.doc_appointments = doc_appointments;
-window.doc_patientHistory = doc_patientHistory;
-window.doc_openPatient = doc_openPatient;
-window.loadDoctorPatientHistory = loadDoctorPatientHistory;
+window.loadDoctor = loadDoctor;
 window.loadDoctorAppointments = loadDoctorAppointments;
+window.loadDoctorPatientHistory = loadDoctorPatientHistory;
+window.doc_openPatient = doc_openPatient;
 window.doc_open = doc_open;
 window.doc_refreshDay = doc_refreshDay;
