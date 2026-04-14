@@ -412,99 +412,63 @@ function loadReceptionistPatientCreate() {
 }
 
 function rx_showPatientCreate() {
-  rx_panel(`
-    <div class="section-title">
-      <h3>Register Patient</h3>
-      <div class="tools">
-        <button class="ghost" onclick="rx_panel('')">Close</button>
+  rx_openModal(
+    "Register Patient",
+    "Create a new patient record.",
+    `
+    <div class="form-grid">
+      <div class="field">
+        <label>First Name</label>
+        <input id="p_first" placeholder="First Name">
+      </div>
+
+      <div class="field">
+        <label>Last Name</label>
+        <input id="p_last" placeholder="Last Name">
+      </div>
+
+      <div class="field">
+        <label>Phone</label>
+        <input id="p_phone" placeholder="Phone">
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input id="p_email" placeholder="Email (optional)">
+      </div>
+
+      <div class="field">
+        <label>Date of Birth</label>
+        <input id="p_dob" type="date">
       </div>
     </div>
 
-    <div class="section">
-      <h3>Patient Information</h3>
-      <div class="form-grid">
-        <div class="field">
-          <label>First Name</label>
-          <input id="p_first" placeholder="First Name">
-        </div>
-        <div class="field">
-          <label>Last Name</label>
-          <input id="p_last" placeholder="Last Name">
-        </div>
-        <div class="field">
-          <label>Phone</label>
-          <input id="p_phone" placeholder="Phone">
-        </div>
-        <div class="field">
-          <label>Email</label>
-          <input id="p_email" placeholder="Email (optional)">
-        </div>
-        <div class="field">
-          <label>Date of Birth</label>
-          <input id="p_dob" type="date">
-          <div class="hint">Required</div>
-        </div>
+    <div style="margin-top:16px;">
+      <strong>Emergency Contact</strong>
+      <div class="form-grid" style="margin-top:10px;">
+        <input id="ec_first" placeholder="First Name">
+        <input id="ec_last" placeholder="Last Name">
+        <input id="ec_phone" placeholder="Phone">
+        <input id="ec_relationship" placeholder="Relationship">
       </div>
     </div>
 
-    <div class="section" style="margin-top:18px;">
-      <details open>
-        <summary><strong>Emergency Contact</strong></summary>
-
-        <div class="form-grid" style="margin-top:10px;">
-          <div class="field">
-            <label>First Name</label>
-            <input id="ec_first" placeholder="Emergency Contact First Name">
-          </div>
-          <div class="field">
-            <label>Last Name</label>
-            <input id="ec_last" placeholder="Emergency Contact Last Name">
-          </div>
-          <div class="field">
-            <label>Phone</label>
-            <input id="ec_phone" placeholder="Emergency Contact Phone">
-          </div>
-          <div class="field">
-            <label>Relationship</label>
-            <input id="ec_relationship" placeholder="Relationship to Patient">
-          </div>
-        </div>
-
-        <div class="hint">Recommended for intake.</div>
-      </details>
-    </div>
-
-    <div class="section" style="margin-top:18px;">
-      <details open>
-        <summary><strong>Insurance Information</strong></summary>
-
-        <div class="form-grid" style="margin-top:10px;">
-          <div class="field">
-            <label>Insurance Provider</label>
-            <input id="ins_provider" placeholder="Insurance Provider">
-          </div>
-
-          <div class="field">
-            <label>Policy Number</label>
-            <input id="ins_policy_number" placeholder="Policy Number">
-          </div>
-
-          <div class="field">
-            <label>Policy Holder</label>
-            <input id="ins_policy_holder" placeholder="Policy Holder">
-          </div>
-        </div>
-
-        <div class="hint">If the patient does not have insurance, leave these fields blank.</div>
-      </details>
-    </div>
-
-    <div class="row" style="margin-top:12px;">
-      <button class="admin-create-submit" onclick="rx_createPatient()">Register Patient</button>
+    <div style="margin-top:16px;">
+      <strong>Insurance Information</strong>
+      <div class="form-grid" style="margin-top:10px;">
+        <input id="ins_provider" placeholder="Provider">
+        <input id="ins_policy_number" placeholder="Policy Number">
+        <input id="ins_policy_holder" placeholder="Policy Holder">
+      </div>
     </div>
 
     <div id="rx_msg" style="margin-top:10px;"></div>
-  `);
+    `,
+    `
+      <button class="ghost" onclick="rx_closeModal()">Cancel</button>
+      <button class="admin-create-submit" onclick="rx_createPatient()">Register Patient</button>
+    `
+  );
 }
 
 function rx_showPatientSearchInfo() {
